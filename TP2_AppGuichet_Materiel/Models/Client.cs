@@ -117,6 +117,8 @@ namespace Models
 
         // Constructeurs 
 
+        public Client()
+        { }
 
         public Client(string pNumClient, string pNom, string pMotDePasse,Roles pRole, SorteComptes pSorte, int pSolde)
         {
