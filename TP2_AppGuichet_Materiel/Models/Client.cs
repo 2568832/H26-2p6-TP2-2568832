@@ -112,8 +112,8 @@ namespace Models
 
         public List<Transaction> Transactions
         {
-            get { return Transactions; }
-            set {  Transactions = value; }
+            get ;
+            set ;
         }
 
         // Constructeurs 
@@ -133,6 +133,8 @@ namespace Models
             Role = pRole;
             SorteCompte = pSorte;
             Solde = pSolde;
+
+            Transactions = new List<Transaction>();
         }
 
         public Client(string pChaineLue)
@@ -149,6 +151,8 @@ namespace Models
             Role = (Roles)(int.Parse(séparation[3]));
             SorteCompte = (SorteComptes)(int.Parse(séparation[4]));
             Solde = int.Parse(séparation[5]);
+
+            Transactions = new List<Transaction>();
         }
 
         // Méthodes
@@ -195,14 +199,17 @@ namespace Models
             {
                 throw new ArgumentNullException();
             }
-            //if ()                                        // je ne sais pas quoi fair appartien a un autre client
-            
+            if (pTransaction.NumClient != NumClient)
+            {
+                throw new InvalidOperationException();
+            }
             if (Transactions.Contains(pTransaction)) 
             {
                 throw new InvalidOperationException();
             }
             
             Transactions.Add(pTransaction);
+            
         }
 
         public string ToCsv()
