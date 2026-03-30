@@ -38,6 +38,7 @@ namespace Models
                     return false;
                 }
             }
+            
         }
 
         public string MotDePasse
@@ -195,10 +196,12 @@ namespace Models
                 throw new ArgumentNullException();
             }
             //if ()                                        // je ne sais pas quoi fair appartien a un autre client
+            
             if (Transactions.Contains(pTransaction)) 
             {
                 throw new InvalidOperationException();
             }
+            
             Transactions.Add(pTransaction);
         }
 
