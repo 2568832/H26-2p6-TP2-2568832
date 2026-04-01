@@ -92,17 +92,48 @@ namespace Models
 
         public void CreerTransaction(SorteTransactions pSorte, string pNumClient, DateTime pDate, int pMontant)
         {
+            
             try
             {
-                Transaction T = new Transaction(pSorte, pNumClient, pDate, pMontant);
-                Transactions.Add(T);
+                Client c = new Client(pNumClient);
+                
+                if (TrouverClient(c))
+                {
+                    Transaction T = new Transaction(pSorte, pNumClient, pDate, pMontant);
+                    Clients[int.Parse(pNumClient)].AjouterTransaction(T);
+                    Transactions.Add(T);
+                }
             }
-            catch (ArgumentException ex)
+            catch 
             {
+                throw new Exception("non");
             }
             
         }
 
+        public bool Sauvegarde()
+        {
+           
+        }
+
+        public void SauvegarderTransactions(string pFichier)
+        {
+
+        }
+        public bool Connexion(string numClient, string motDePasse)
+        {
+            
+        }
+
+        public bool Deconnexion()
+        {
+           
+        }
+
+        public Client TrouverClient(string pNumClient)
+        {
+           
+        }
     }
 
 
