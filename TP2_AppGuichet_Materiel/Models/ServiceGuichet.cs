@@ -22,28 +22,29 @@ namespace Models
         // Propriétés
         public string CheminFichierClients
         {
-            get;
+            get {  return m_cheminFichierClients;}
         }
 
         public string CheminFichierTransactions
         {
-            get;
+            get { return m_cheminFichierTransactions;}
         }
 
-        public List<Client> Clients { get;}
+        public List<Client> Clients { get { return m_clients; } }
 
-        public List<Transaction> Transactions { get; }
+        public List<Transaction> Transactions { get { return m_transactions; } }
 
 
         // Constructeur
         public ServiceGuichet(string pCheminFichierClients, string pCheminFichierTransactions)
         {
-            if (File.Exists(pCheminFichierClients) || File.Exists(pCheminFichierTransactions))
+            if (File.Exists(pCheminFichierClients) && File.Exists(pCheminFichierTransactions))
             {
-                CheminFichierClients = pCheminFichierClients;
-                CheminFichierTransactions = pCheminFichierTransactions;
-                ChargerClients();
-                ChargerTransactions();
+                m_cheminFichierClients = pCheminFichierClients;
+                m_cheminFichierTransactions = pCheminFichierTransactions;
+                m_clients = new List<Client>();
+                m_transactions = new List<Transaction>();
+                
             }
             else
             {
@@ -57,63 +58,70 @@ namespace Models
 
         public int ChargerClients()
         {
-            int TentativeEchouées = 0;
-            using (StreamReader file = new StreamReader(CheminFichierClients))
+            if (File.Exists(CheminFichierClients))
             {
-                
-
-                while (file.EndOfStream)
+                using (StreamReader file = new StreamReader(CheminFichierClients))
                 {
-                    try
+                    int TentativeEchouées = 0;
+
+                    while (!file.EndOfStream)
                     {
-                        string line = file.ReadLine();
-                        Client c = new Client(line);
-                        Clients.Add(c);
+                        try
+                        {
+                            string line = file.ReadLine();
+                            Client c = new Client(line);
+                            Clients.Add(c);
+
+                        }
+                        catch
+                        {
+                            if (TentativeEchouées < 2)
+                            {
+                                TentativeEchouées++;
+
+                            }
+                        }
                     }
-                    catch { TentativeEchouées++; }
+                    return TentativeEchouées;
                 }
             }
-            return TentativeEchouées;
+            else { throw new ArgumentException(); }
         }
 
         public int ChargerTransactions()
         {
-            int TentativeEchouées = 0;
+            
             using (StreamReader file = new StreamReader(CheminFichierTransactions))
             {
+                int tentativeEchouées = 0;
 
-
-                while (file.EndOfStream)
+                while (!file.EndOfStream)
                 {
                     try
                     {
                         string line = file.ReadLine();
-                        string[] séparation = line.Split(",");
-                        CreerTransaction(((SorteTransactions)(int.Parse(séparation[0]))), (séparation[1]), (DateTime.Parse(séparation[2])), (int.Parse(séparation[3])) );
+                        string[] séparation = line.Split(',');
+                        CreerTransaction(((SorteTransactions)( int.Parse(séparation[0]))), (séparation[1]), (DateTime.Parse(séparation[2])), (int.Parse(séparation[3])) );
                     }
-                    catch { TentativeEchouées++; }
+                    catch { tentativeEchouées++; }
                 }
+                return tentativeEchouées;
             }
-            return TentativeEchouées;
+            
         }
 
         public void CreerTransaction(SorteTransactions pSorte, string pNumClient, DateTime pDate, int pMontant)
         {
-            
-            try
+            if (TrouverClient(pNumClient) != null)
             {
-                if (TrouverClient(pNumClient) == null)
-                {
-                    Transaction T = new Transaction(pSorte, pNumClient, pDate, pMontant);
-                    Clients[int.Parse(pNumClient)].AjouterTransaction(T);
-                    Transactions.Add(T);
-                }
+                Transaction T = new Transaction(pSorte, pNumClient, pDate, pMontant);
+                Transactions.Add(T);
+                TrouverClient(pNumClient).AjouterTransaction(T);
             }
-            catch 
+            else
             {
-                throw new Exception("non");
+                throw new ArgumentException();
             }
-            
         }
 
         public bool Sauvegarde()

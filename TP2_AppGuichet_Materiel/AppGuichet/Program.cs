@@ -1,3 +1,5 @@
+using Models;
+
 namespace AppGuichet
 {
     internal static class Program
