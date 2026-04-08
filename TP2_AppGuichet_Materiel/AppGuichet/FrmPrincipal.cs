@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.IO;
+using Models;
 
 
 namespace AppGuichet
@@ -20,12 +21,11 @@ namespace AppGuichet
         #region Constantes
         //--- CHAMPS: constantes ----------------------------------------------------------
         public const string CHEMIN_FICHIER_CLIENTS = "../../../Fichiers/Clients.csv";
-               public const string CHEMIN_FICHIER_TRANSACTIONS = "../../../Fichiers/Transactions.csv";
+        public const string CHEMIN_FICHIER_TRANSACTIONS = "../../../Fichiers/Transactions.csv";
         #endregion
 
         #region Champs et Propriétés
-       
-
+        
 
         #endregion
 
@@ -35,7 +35,7 @@ namespace AppGuichet
         {
             InitializeComponent();
             this.Text += APP_INFO;
-           
+
 
         }
         #endregion
@@ -48,12 +48,12 @@ namespace AppGuichet
         //---------------------------------------------------------------------------------
         private void mnuAdminListeClients_Click(object sender, EventArgs e)
         {
-          
+
         }
         //---------------------------------------------------------------------------------
         private void mnuAdminListeTransactions_Click(object sender, EventArgs e)
         {
-           
+
         }
 
 
@@ -61,17 +61,17 @@ namespace AppGuichet
 
         private void FrmPrincipal_FormClosing(object sender, EventArgs e)
         {
-           
-            
+
+
         }
         private void mnuFichierQuitter_Click(object sender, EventArgs e)
         {
-           
-           
-           
+
+
+
         }
 
-       
+
 
         #region Bouton Connexion/Déconnexion 
         //---------------------------------------------------------------------------------
@@ -79,8 +79,18 @@ namespace AppGuichet
         {
             
 
-            
+            if (btnConnexion.Text == "Se connecter")
+            {
+                btnConnexion.Text = "Se déconnecter";
+            }
+            else if (btnConnexion.Text == "Se déconnecter")
+            {
+                btnConnexion.Text = "Se connecter";
+            }
+
+           
         }
+        
         #endregion
 
         #region Bouton Retirer et Événement Combo Montant à retirer
@@ -88,15 +98,15 @@ namespace AppGuichet
         //Retire le montant choisi
         public void btnDeposer_Click(object sender, EventArgs e)
         {
-            
 
-           
+
+
         }
         //---------------------------------------------------------------------------------
         //Choix du montant à retirer
         private void cboMontant_SelectedIndexChanged(object sender, EventArgs e)
         {
-           
+
 
         }
 
@@ -104,16 +114,21 @@ namespace AppGuichet
 
         private void btnRetirer_Click(object sender, EventArgs e)
         {
-            
 
-           
+
+
         }
 
-        
+
 
         private void mnuAdministrateur_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void FrmPrincipal_Load(object sender, EventArgs e)
+        {
+            
         }
     }
 }

@@ -327,6 +327,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Guichet Automatique ";
             FormClosing += FrmPrincipal_FormClosing;
+            Load += FrmPrincipal_Load;
             grpIdentification.ResumeLayout(false);
             grpIdentification.PerformLayout();
             grpInfosClient.ResumeLayout(false);
