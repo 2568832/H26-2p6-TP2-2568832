@@ -25,7 +25,7 @@ namespace AppGuichet
         #endregion
 
         #region Champs et Propriétés
-        
+        public ServiceGuichet ServiceGuichet = new ServiceGuichet(CHEMIN_FICHIER_CLIENTS,CHEMIN_FICHIER_TRANSACTIONS);
 
         #endregion
 
@@ -34,13 +34,17 @@ namespace AppGuichet
         public FrmPrincipal()
         {
             InitializeComponent();
+            ServiceGuichet.ChargerClients();
+            ServiceGuichet.ChargerTransactions();
+
             this.Text += APP_INFO;
 
 
         }
         #endregion
 
-
+        public List<Client> clients;
+        public Client utilisateur;
 
 
 
@@ -75,20 +79,67 @@ namespace AppGuichet
 
         #region Bouton Connexion/Déconnexion 
         //---------------------------------------------------------------------------------
+        public bool Connexion = false;
         public void btnConnexion_Click(object sender, EventArgs e)
         {
+            if (Connexion == true)
+            {
+                txtMotDePasse.Clear();
+                txtNumClient.Clear();
+            }
             
 
-            if (btnConnexion.Text == "Se connecter")
+            try
             {
-                btnConnexion.Text = "Se déconnecter";
+                ServiceGuichet.Connexion(txtNumClient.Text.Trim(), txtMotDePasse.Text.Trim());
+
+
+
+                if (ServiceGuichet.Connexion(txtNumClient.Text.Trim(), txtMotDePasse.Text.Trim()) == true)
+                {
+
+                    Connexion = true;
+
+                    txtMotDePasse.Enabled = false;
+                    txtNumClient.Enabled = false;
+                    if (txtNumClient.Text != "000000")
+                    {
+                        grpInfosClient.Enabled = true;
+                        mnuAdministrateur.Enabled = false;
+                    }
+                    else
+                    {
+                        mnuAdministrateur.Enabled = true;
+
+                    }
+                }
+                else 
+                {
+                    Connexion = false;
+
+                    grpInfosClient.Enabled = false;
+                    txtMotDePasse.Enabled = true;
+                    txtNumClient.Enabled = true;
+
+                }
+                
+                
             }
-            else if (btnConnexion.Text == "Se déconnecter")
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+            if (Connexion == false)
             {
                 btnConnexion.Text = "Se connecter";
             }
+            else
+            {
+                btnConnexion.Text = "Se déconnecter";
 
-           
+            }
+
         }
         
         #endregion
