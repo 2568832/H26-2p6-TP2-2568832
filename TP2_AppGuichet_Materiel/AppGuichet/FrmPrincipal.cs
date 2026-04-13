@@ -86,6 +86,9 @@ namespace AppGuichet
             {
                 txtMotDePasse.Clear();
                 txtNumClient.Clear();
+                txtNom.Clear();
+                txtSolde.Clear();
+                txtSorteCompte.Clear();
             }
             
 
@@ -102,6 +105,11 @@ namespace AppGuichet
 
                     txtMotDePasse.Enabled = false;
                     txtNumClient.Enabled = false;
+
+                    txtNom.Text = ServiceGuichet.ClientCourant.Nom;
+                    txtSorteCompte.Text = ServiceGuichet.ClientCourant.SorteCompte.ToString();
+                    txtSolde.Text = ServiceGuichet.ClientCourant.Solde.ToString();
+
                     if (txtNumClient.Text != "000000")
                     {
                         grpInfosClient.Enabled = true;
@@ -149,7 +157,29 @@ namespace AppGuichet
         //Retire le montant choisi
         public void btnDeposer_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (cboMontant.Text != null || cboMontant.Text != "")
+                {
+                    
+                    try
+                    {
+                        ServiceGuichet.ClientCourant.Deposer(int.Parse(cboMontant.Text));
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Erreur");
+                    }
 
+                }
+            }
+            catch (InvalidOperationException  ex) 
+            {
+                MessageBox.Show(ex.Message);
+            }
+            
+            txtSolde.Text = ServiceGuichet.ClientCourant.Solde.ToString();
+            
 
 
         }
@@ -157,16 +187,50 @@ namespace AppGuichet
         //Choix du montant à retirer
         private void cboMontant_SelectedIndexChanged(object sender, EventArgs e)
         {
-
-
+            if (!ServiceGuichet.ClientCourant.PeutRetirer(int.Parse(cboMontant.Text)))
+            {
+                btnRetirer.Enabled = false;
+            }
+            else { btnRetirer.Enabled = true; }
         }
 
         #endregion
 
         private void btnRetirer_Click(object sender, EventArgs e)
         {
+            try
+            {
+                if (cboMontant.Text != null)
+                {
+                    
+                    try
+                    {
+                        ServiceGuichet.ClientCourant.Retirer(int.Parse(cboMontant.Text));
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Erreur");
+                    }
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            txtSolde.Text = ServiceGuichet.ClientCourant.Solde.ToString();
+            try // ---------------------------------------------------------------------------------Les Try ne sont pas tous bon
+            {
+                if (!ServiceGuichet.ClientCourant.PeutRetirer(int.Parse(cboMontant.Text)))
+                {
+                    btnRetirer.Enabled = false;
+                }
+                else { btnRetirer.Enabled = true; }
+            }
+            catch
+            {
+                MessageBox.Show("Erreur dans le if");
 
-
+            }
 
         }
 

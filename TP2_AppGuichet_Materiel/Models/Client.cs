@@ -7,7 +7,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Models
 {
-    public enum SorteComptes { Aucun, Épargne, Chèque, intérêt }
+    public enum SorteComptes { Aucun = -1, Épargne, Chèque, intérêt }
 
     public enum Roles { Administrateur, Client }
 
