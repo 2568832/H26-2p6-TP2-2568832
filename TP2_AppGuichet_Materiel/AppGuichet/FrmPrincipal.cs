@@ -25,7 +25,7 @@ namespace AppGuichet
         #endregion
 
         #region Champs et Propriétés
-        public ServiceGuichet ServiceGuichet = new ServiceGuichet(CHEMIN_FICHIER_CLIENTS,CHEMIN_FICHIER_TRANSACTIONS);
+        public ServiceGuichet ServiceGuichets = new ServiceGuichet(CHEMIN_FICHIER_CLIENTS,CHEMIN_FICHIER_TRANSACTIONS);
 
         #endregion
 
@@ -34,8 +34,8 @@ namespace AppGuichet
         public FrmPrincipal()
         {
             InitializeComponent();
-            ServiceGuichet.ChargerClients();
-            ServiceGuichet.ChargerTransactions();
+            ServiceGuichets.ChargerClients();
+            ServiceGuichets.ChargerTransactions();
 
             this.Text += APP_INFO;
 
@@ -52,12 +52,14 @@ namespace AppGuichet
         //---------------------------------------------------------------------------------
         private void mnuAdminListeClients_Click(object sender, EventArgs e)
         {
-
+            FrmListeClients frm = new FrmListeClients();
+            frm.ShowDialog();
         }
         //---------------------------------------------------------------------------------
         private void mnuAdminListeTransactions_Click(object sender, EventArgs e)
         {
-
+            FrmListeTransactions frmListeTransactions = new FrmListeTransactions();
+            frmListeTransactions.ShowDialog();
         }
 
 
@@ -94,11 +96,11 @@ namespace AppGuichet
 
             try
             {
-                ServiceGuichet.Connexion(txtNumClient.Text.Trim(), txtMotDePasse.Text.Trim());
+                ServiceGuichets.Connexion(txtNumClient.Text.Trim(), txtMotDePasse.Text.Trim());
 
 
 
-                if (ServiceGuichet.Connexion(txtNumClient.Text.Trim(), txtMotDePasse.Text.Trim()) == true)
+                if (ServiceGuichets.Connexion(txtNumClient.Text.Trim(), txtMotDePasse.Text.Trim()) == true)
                 {
 
                     Connexion = true;
@@ -106,19 +108,23 @@ namespace AppGuichet
                     txtMotDePasse.Enabled = false;
                     txtNumClient.Enabled = false;
 
-                    txtNom.Text = ServiceGuichet.ClientCourant.Nom;
-                    txtSorteCompte.Text = ServiceGuichet.ClientCourant.SorteCompte.ToString();
-                    txtSolde.Text = ServiceGuichet.ClientCourant.Solde.ToString();
+                    txtNom.Text = ServiceGuichets.ClientCourant.Nom;
+                    txtSorteCompte.Text = ServiceGuichets.ClientCourant.SorteCompte.ToString();
+                    txtSolde.Text = ServiceGuichets.ClientCourant.Solde.ToString();
 
                     if (txtNumClient.Text != "000000")
                     {
                         grpInfosClient.Enabled = true;
                         mnuAdministrateur.Enabled = false;
+                        mnuAdminListeClients.Enabled = false;
+                        mnuAdminListeTransactions.Enabled = false;
+                        
                     }
                     else
                     {
                         mnuAdministrateur.Enabled = true;
-
+                        mnuAdminListeClients.Enabled = true;
+                        mnuAdminListeTransactions.Enabled = true;
                     }
                 }
                 else 
@@ -164,7 +170,7 @@ namespace AppGuichet
                     
                     try
                     {
-                        ServiceGuichet.ClientCourant.Deposer(int.Parse(cboMontant.Text));
+                        ServiceGuichets.ClientCourant.Deposer(int.Parse(cboMontant.Text));
                     }
                     catch
                     {
@@ -178,7 +184,7 @@ namespace AppGuichet
                 MessageBox.Show(ex.Message);
             }
             
-            txtSolde.Text = ServiceGuichet.ClientCourant.Solde.ToString();
+            txtSolde.Text = ServiceGuichets.ClientCourant.Solde.ToString();
             
 
 
@@ -187,7 +193,7 @@ namespace AppGuichet
         //Choix du montant à retirer
         private void cboMontant_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (!ServiceGuichet.ClientCourant.PeutRetirer(int.Parse(cboMontant.Text)))
+            if (!ServiceGuichets.ClientCourant.PeutRetirer(int.Parse(cboMontant.Text)))
             {
                 btnRetirer.Enabled = false;
             }
@@ -205,7 +211,7 @@ namespace AppGuichet
                     
                     try
                     {
-                        ServiceGuichet.ClientCourant.Retirer(int.Parse(cboMontant.Text));
+                        ServiceGuichets.ClientCourant.Retirer(int.Parse(cboMontant.Text));
                     }
                     catch
                     {
@@ -217,10 +223,10 @@ namespace AppGuichet
             {
                 MessageBox.Show(ex.Message);
             }
-            txtSolde.Text = ServiceGuichet.ClientCourant.Solde.ToString();
+            txtSolde.Text = ServiceGuichets.ClientCourant.Solde.ToString();
             try // ---------------------------------------------------------------------------------Les Try ne sont pas tous bon
             {
-                if (!ServiceGuichet.ClientCourant.PeutRetirer(int.Parse(cboMontant.Text)))
+                if (!ServiceGuichets.ClientCourant.PeutRetirer(int.Parse(cboMontant.Text)))
                 {
                     btnRetirer.Enabled = false;
                 }
@@ -243,7 +249,7 @@ namespace AppGuichet
 
         private void FrmPrincipal_Load(object sender, EventArgs e)
         {
-            
+           
         }
     }
 }

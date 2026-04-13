@@ -52,6 +52,7 @@ namespace AppGuichet
             lsvClients.TabIndex = 2;
             lsvClients.UseCompatibleStateImageBehavior = false;
             lsvClients.View = View.Details;
+            lsvClients.SelectedIndexChanged += lsvClients_SelectedIndexChanged;
             // 
             // clhNo
             // 
